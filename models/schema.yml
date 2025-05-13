@@ -6,7 +6,49 @@ sources:
      tables:
        - identifier: raw_gz_sales
          name: sales
+         description: Greenweez sales/ orders -> product -> kpi
+
+         loaded_at_field: "CAST(date_date AS TIMESTAMP)"
+         freshness: 
+           warn_after:
+             count: 90
+             period: day
+         
+         columns:
+          - name: pdt_id
+            description: foreign key for products table
+            tests:
+              - not_null
+
+          - name: orders_id
+            description: foreign key for orders tables
+            tests:
+              - not_null
+
+         tests:
+           - unique:
+              column_name: "(orders_id || '_' || pdt_id)"
+
+
        - identifier: raw_gz_product
          name: product
+         description: Greenweez list of products and prices associated
+
+         columns:
+          - name: products_id
+            description: primary key
+            tests:
+              - not_null
+              - unique
+
+
        - identifier: raw_gz_ship
          name: ship
+         description: Greenweez list of orders with cost and fee associated to the shipping
+
+         columns:
+          - name: orders_id
+            description: primary key
+            tests:
+              - not_null
+              - unique
