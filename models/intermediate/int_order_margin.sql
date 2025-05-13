@@ -32,4 +32,4 @@ SELECT    --calculation of the margin and operational margin given all the neces
     ROUND(total_revenue - purchase_cost,2) AS margin,
     ROUND((total_revenue - purchase_cost) + shipping_fee - log_cost - ship_cost,2) AS operational_margin
 FROM ship_join
-ORDER BY date_date
+ORDER BY operational_margin ASC
