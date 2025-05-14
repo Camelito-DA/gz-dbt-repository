@@ -4,7 +4,7 @@ sources:
    - name: raw
      schema: gz_raw_data
      tables:
-       - identifier: raw_gz_sales
+       - identifier: raw_gz_sales #sales 
          name: sales
          description: Greenweez sales/ orders -> product -> kpi
 
@@ -30,7 +30,7 @@ sources:
               column_name: "(orders_id || '_' || pdt_id)"
 
 
-       - identifier: raw_gz_product
+       - identifier: raw_gz_product #product
          name: product
          description: Greenweez list of products and prices associated
 
@@ -42,7 +42,7 @@ sources:
               - unique
 
 
-       - identifier: raw_gz_ship
+       - identifier: raw_gz_ship #ship
          name: ship
          description: Greenweez list of orders with cost and fee associated to the shipping
 
@@ -52,6 +52,82 @@ sources:
             tests:
               - not_null
               - unique
+              
+       - identifier: raw_gz_adwords # campaign adwords
+         name: adwords
+         description: Daily campaign detail of adwords
+         
+         columns:
+          - name: date_date
+            description: foreign key
+            tests:
+              - not_null
+
+          - name: campaign_key
+            description: foreign key
+            tests:
+              - not_null
+
+         tests:
+           - unique:
+              column_name: "(date_date || '_' || campaign_key)"
+
+       - identifier: raw_gz_criteo # campaign criteo
+         name: criteo
+         description: Daily campaign detail of criteo
+         
+         columns:
+          - name: date_date
+            description: foreign key
+            tests:
+              - not_null
+
+          - name: campaign_key
+            description: foreign key
+            tests:
+              - not_null
+
+         tests:
+           - unique:
+              column_name: "(date_date || '_' || campaign_key)"
+
+       - identifier: raw_gz_facebook # campaign facebook
+         name: facebook
+         description: Daily campaign detail of facebook
+         
+         columns:
+          - name: date_date
+            description: foreign key
+            tests:
+              - not_null
+
+          - name: campaign_key
+            description: foreign key
+            tests:
+              - not_null
+
+         tests:
+           - unique:
+              column_name: "(date_date || '_' || campaign_key)"
+
+       - identifier: raw_gz_bing # campaign bing
+         name: bing
+         description: Daily campaign detail of bing
+         
+         columns:
+          - name: date_date
+            description: foreign key
+            tests:
+              - not_null
+
+          - name: campaign_key
+            description: foreign key
+            tests:
+              - not_null
+
+         tests:
+           - unique:
+              column_name: "(date_date || '_' || campaign_key)"
 
 models:
   - name: int_order_margin
