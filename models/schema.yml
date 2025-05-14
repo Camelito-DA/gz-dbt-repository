@@ -130,7 +130,7 @@ sources:
               column_name: "(date_date || '_' || campaign_key)"
 
 models:
-  - name: int_order_margin
+  - name: int_order_margin #intermediate kpi by order
     description: Calculation of all the KPI needed on each orders
     columns:
       - name: orders_id
@@ -139,7 +139,7 @@ models:
           - not_null
           - unique
 
-  - name: finance_days
+  - name: finance_days #finance KPI
     description: calculation of summed up KPI on daily report
     columns:
       - name: date_date
@@ -148,7 +148,7 @@ models:
           - not_null
           - unique
 
-  - name: int_campaigns
+  - name: int_campaigns #union campaigns
     description: Unions of all campaign adwords/facebook/criteo/bing
   
     columns:
@@ -176,3 +176,28 @@ models:
     tests:
      - unique:
         column_name: "(date_date || '_' || campaign_key)"
+
+  - name: int_campaigns_day #campaign by day
+    description: Aggragation of campaigns on days
+  
+    columns:
+      - name: date_date
+        description: primary key
+        tests:
+          - not_null
+          - unique
+          
+      - name: ads_cost
+        description: cost of ads campaigns at that day
+        tests:
+          - not_null
+
+      - name: impression
+        description: how many times the ads were viewed at that day
+        tests:
+          - not_null
+
+      - name: click
+        description: how many times the ads were cliked on at that day
+        tests:
+          - not_null
