@@ -203,7 +203,7 @@ models:
           - not_null
 
   - name: finance_campaigns_day #Finance KPI per day with ads_cost
-    description: All finance KPI + calculation of ads_margin on operational_margin
+    description: All finance KPI per day + calculation of ads_margin on operational_margin
   
     columns:
       - name: date_date
@@ -212,3 +212,12 @@ models:
           - not_null
           - unique
 
+  - name: finance_campaigns_month #Finance KPI per month with ads_cost
+    description: All finance KPI per month + calculation of ads_margin on operational_margin
+  
+    columns:
+      - name: date_month
+        description: primary key
+        tests:
+          - not_null
+          - unique
