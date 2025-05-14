@@ -201,3 +201,14 @@ models:
         description: how many times the ads were cliked on at that day
         tests:
           - not_null
+
+  - name: finance_campaigns_day #Finance KPI per day with ads_cost
+    description: All finance KPI + calculation of ads_margin on operational_margin
+  
+    columns:
+      - name: date_date
+        description: primary key
+        tests:
+          - not_null
+          - unique
+
