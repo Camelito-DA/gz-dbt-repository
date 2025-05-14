@@ -32,9 +32,10 @@ SELECT    --calculation of the margin and operational margin given all the neces
     purchase_cost,
     nb_products,
     ROUND(total_revenue - purchase_cost,2) AS margin,
+    {{ margin_percent('total_revenue', 'purchase_cost') }} AS margin_percent,
     ROUND((total_revenue - purchase_cost) + shipping_fee - log_cost - ship_cost,2) AS operational_margin,
     shipping_fee,
     ship_cost,
     log_cost
 FROM ship_join
-ORDER BY operational_margin ASC
+ORDER BY operational_margin DESC

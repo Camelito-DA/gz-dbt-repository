@@ -4,7 +4,7 @@ sources:
    - name: raw
      schema: gz_raw_data
      tables:
-       - identifier: raw_gz_sales
+       - identifier: raw_gz_sales #sales 
          name: sales
          description: Greenweez sales/ orders -> product -> kpi
 
@@ -30,7 +30,7 @@ sources:
               column_name: "(orders_id || '_' || pdt_id)"
 
 
-       - identifier: raw_gz_product
+       - identifier: raw_gz_product #product
          name: product
          description: Greenweez list of products and prices associated
 
@@ -42,7 +42,7 @@ sources:
               - unique
 
 
-       - identifier: raw_gz_ship
+       - identifier: raw_gz_ship #ship
          name: ship
          description: Greenweez list of orders with cost and fee associated to the shipping
 
@@ -52,9 +52,85 @@ sources:
             tests:
               - not_null
               - unique
+              
+       - identifier: raw_gz_adwords # campaign adwords
+         name: adwords
+         description: Daily campaign detail of adwords
+         
+         columns:
+          - name: date_date
+            description: foreign key
+            tests:
+              - not_null
+
+          - name: campaign_key
+            description: foreign key
+            tests:
+              - not_null
+
+         tests:
+           - unique:
+              column_name: "(date_date || '_' || campaign_key)"
+
+       - identifier: raw_gz_criteo # campaign criteo
+         name: criteo
+         description: Daily campaign detail of criteo
+         
+         columns:
+          - name: date_date
+            description: foreign key
+            tests:
+              - not_null
+
+          - name: campaign_key
+            description: foreign key
+            tests:
+              - not_null
+
+         tests:
+           - unique:
+              column_name: "(date_date || '_' || campaign_key)"
+
+       - identifier: raw_gz_facebook # campaign facebook
+         name: facebook
+         description: Daily campaign detail of facebook
+         
+         columns:
+          - name: date_date
+            description: foreign key
+            tests:
+              - not_null
+
+          - name: campaign_key
+            description: foreign key
+            tests:
+              - not_null
+
+         tests:
+           - unique:
+              column_name: "(date_date || '_' || campaign_key)"
+
+       - identifier: raw_gz_bing # campaign bing
+         name: bing
+         description: Daily campaign detail of bing
+         
+         columns:
+          - name: date_date
+            description: foreign key
+            tests:
+              - not_null
+
+          - name: campaign_key
+            description: foreign key
+            tests:
+              - not_null
+
+         tests:
+           - unique:
+              column_name: "(date_date || '_' || campaign_key)"
 
 models:
-  - name: int_order_margin
+  - name: int_order_margin #intermediate kpi by order
     description: Calculation of all the KPI needed on each orders
     columns:
       - name: orders_id
@@ -63,7 +139,7 @@ models:
           - not_null
           - unique
 
-  - name: finance_days
+  - name: finance_days #finance KPI
     description: calculation of summed up KPI on daily report
     columns:
       - name: date_date
@@ -71,6 +147,77 @@ models:
         tests:
           - not_null
           - unique
+
+  - name: int_campaigns #union campaigns
+    description: Unions of all campaign adwords/facebook/criteo/bing
+  
+    columns:
+      - name: date_date
+        description: foreign key
+        tests:
+          - not_null
+      - name: ads_cost
+        description: cost of ads campaign at that day
+        tests:
+          - not_null
+      - name: impression
+        description: how many times the ads was viewed at that day
+        tests:
+          - not_null
+      - name: click
+        description: how many times the ads was cliked on at that day
+        tests:
+          - not_null
+      - name: campaign_key
+        description: foreign key
+        tests:
+          - not_null
+
+    tests:
+     - unique:
+        column_name: "(date_date || '_' || campaign_key)"
+
+  - name: int_campaigns_day #campaign by day
+    description: Aggragation of campaigns on days
+  
+    columns:
+      - name: date_date
+        description: primary key
+        tests:
+          - not_null
+          - unique
           
-          
-          
+      - name: ads_cost
+        description: cost of ads campaigns at that day
+        tests:
+          - not_null
+
+      - name: impression
+        description: how many times the ads were viewed at that day
+        tests:
+          - not_null
+
+      - name: click
+        description: how many times the ads were cliked on at that day
+        tests:
+          - not_null
+
+  - name: finance_campaigns_day #Finance KPI per day with ads_cost
+    description: All finance KPI per day + calculation of ads_margin on operational_margin
+  
+    columns:
+      - name: date_date
+        description: primary key
+        tests:
+          - not_null
+          - unique
+
+  - name: finance_campaigns_month #Finance KPI per month with ads_cost
+    description: All finance KPI per month + calculation of ads_margin on operational_margin
+  
+    columns:
+      - name: date_month
+        description: primary key
+        tests:
+          - not_null
+          - unique
